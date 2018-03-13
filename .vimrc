@@ -1,7 +1,14 @@
 " Colors.
+syntax enable
 set background=dark
+colorscheme slate
+hi Statement ctermfg=LightCyan
+hi Comment ctermfg=Yellow cterm=bold
 " Font.
 set guifont=DejaVu\ Sans\ Mono\ 10
+" Show trailing whitespace.
+highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+match ExtraWhitespace /\s\+$/
 
 " Tab hehavior.
 " Use spaces rather than tabs.
@@ -21,7 +28,7 @@ set wrap
 set linebreak
 
 " Line numbers.
-"set nu
+" set nu
 
 " Window dressing.
 " If a file is changed while vim has it open, and vim doesn't have unsaved changes, automatically reload file.
@@ -32,6 +39,7 @@ set autoread
 :let mapleader = ","
 " Map a latex compile button.
 map <leader>ll :w !latexmk -silent -pdf % <enter>
+map <leader>vs :w !/opt/vertica/bin/vsql -h vertica.csnzoo.com Wayfair ryi -f % <enter>
 
 " Remap gj, gj (display line movement) to j, k.
 noremap <buffer> <silent> k gk
@@ -40,9 +48,15 @@ noremap <buffer> <silent> j gj
 " the paragraph.
 noremap <buffer> <silent> 0 g0
 noremap <buffer> <silent> $ g$
-" Prevent k and j from behaving strangely in operator mode.
-omap <silent> j gj
-omap <silent> k gk
+
+" Allows `//` to visually search for selected text.
+vnoremap // y/<C-R>"<CR>
 
 " Spell-check.
 au BufNewFile,BufRead *.tex set spell
+
+" Set paste hotkey.
+set pastetoggle=<F3>
+
+" Let gf detect python files.
+filetype plugin on
