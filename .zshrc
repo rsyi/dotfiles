@@ -7,7 +7,7 @@ export ZSH=/csnzoo/ryi/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="theunraveler"
+ZSH_THEME="ryi"
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
@@ -93,52 +93,6 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# Artifactory repositories.
-export PIP_INDEX_URL=https://artifactory.service.bo1.csnzoo.com/artifactory/api/pypi/pypi-centos71-all/simple
-export PIP_EXTRA_INDEX_URL=https://artifactory.service.bo1.csnzoo.com/artifactory/api/pypi/pypi-mirror/simple
-
-# User aliases.
-# Navigation aliases.
-# alias l="ls -lha"
-alias cd0="cd /wayfair/home/${USER}/"
-alias cdaf="cd /wayfair/home/${USER}/git-repos/airflow-dags/"
-alias cdcb="cd /wayfair/mnt/crunch_buckets/local/data_science/ryi"
-alias TOP="ssh ryi@bigdatatop01.dev.bo1.csnzoo.com"
-
-# Project-specific.
-## Activation.
-alias cdp0="cd /wayfair/home/${USER}/git-repos/customer-scoring-and-bidding/customer-files/cf_activation_v2"
-alias activate0="source /wayfair/home/${USER}/venvs/cf_activation/bin/activate"
-alias cdaf0="cd /wayfair/home/${USER}/git-repos/airflow-dags/templates/data_science/marketing/customer_file_joint_activation"
-alias cdaf1="cd /wayfair/home/${USER}/git-repos/airflow-dags/templates/data_science/marketing/customer_file_activebuyers_lifestyle"
-# Active buyers.
-alias cdp1="cd /wayfair/home/ryi/git-repos/customer-scoring-and-bidding/customer-files/cf_active_buyers_joss"
-alias activate1="source /wayfair/home/${USER}/venvs/cf_active_buyers_joss/bin/activate"
-
-# Environment aliases.
-alias activate_default="source /wayfair/home/${USER}/venvs/default/bin/activate"
-alias activate_airflow="source /wayfair/app/airflow/venv/airflow/bin/activate"
-
-
-# Shortened commands.
-# vsql connection.
-alias vsql="/opt/vertica/bin/vsql -h vertica.csnzoo.com Wayfair ryi"
-
-# Airflow.
-export AIRFLOW_HOME=/wayfair/app/airflow
-
-# Cookiecutter datascience.
-alias wf-cookiecutter="cookiecutter git@git.csnzoo.com:rfay/cookiecutter-data-science.git"
-
-# Non-project-related source activates.
-# Activate reviewboard env.
-alias activate_rbt="source /wayfair/home/$USERNAME/virtualenv/py27/rbtools/bin/activate"
-# Activate python3 for wheelhaus.
-alias activate_py3="source /wayfair/home/ryi/venvs/python3/bin/activate"
-
-PATH=$HOME/.local/bin:$PATH:$HOME/bin
-export PATH
 
 # Use 256 colors (so terminal plays well with PuTTY).
 export TERM=xterm-256color
