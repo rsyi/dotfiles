@@ -96,3 +96,6 @@ source $ZSH/oh-my-zsh.sh
 
 # Use 256 colors (so terminal plays well with PuTTY).
 export TERM=xterm-256color
+
+alias cd0="cd /mnt/c/Users/rober/"
+alias activate_default="source ~/venvs/default/bin/activate"
