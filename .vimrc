@@ -65,6 +65,7 @@ function! MathAndLiquid()
     "" Define certain regions
     " Block math. Look for "$$[anything]$$"
     syn region math start=/\$\$/ end=/\$\$/
+    syn region math_inline start="\\\\(" end="\\\\)"
     " inline math. Look for "$[not $][anything]$"
     syn match math_block '\$[^$].\{-}\$'
 
@@ -77,6 +78,7 @@ function! MathAndLiquid()
 
     "" Actually highlight those regions.
     hi link math Statement
+    hi link math_inline Statement
     hi link liquid Statement
     hi link highlight_block Function
     hi link math_block Function
