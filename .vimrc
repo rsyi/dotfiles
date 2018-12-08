@@ -20,6 +20,8 @@ set tabstop=4
 " Indentation uses shiftwidth. Pressing tab uses tabstop.
 set shiftwidth=4
 set autoindent
+" Two spaces for HTML files.
+autocmd FileType html :setlocal sw=2 ts=2 sts=2
 
 " Word-wrapping.
 " Wraps visually, without newlines.
