@@ -1,3 +1,25 @@
+" vim-plug
+call plug#begin()
+Plug 'tpope/vim-sensible'
+" On-demand loading
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+
+" Custom plugins.
+Plug 'vimwiki/vimwiki'
+call plug#end()
+
+" vimwiki customizations.
+" Currently, this is only set up for one vimwiki directory.
+" For work, add `wiki_2` following the instructions here:
+" https://opensource.com/article/18/6/vimwiki-gitlab-notes
+let wiki_1 = {}
+let wiki_1.path = '~/vimwiki-personal/'
+let wiki_1.syntax = 'markdown'
+let wiki_1.ext = '.md'
+
+let g:vimwiki_list = [wiki_1]
+let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
+
 " Colors.
 syntax enable
 set background=dark
