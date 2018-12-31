@@ -9,6 +9,10 @@ Plug 'vimwiki/vimwiki'
 call plug#end()
 
 " vimwiki customizations.
+" Required.
+set nocompatible
+filetype plugin on
+syntax on
 " Currently, this is only set up for one vimwiki directory.
 " For work, add `wiki_2` following the instructions here:
 " https://opensource.com/article/18/6/vimwiki-gitlab-notes
@@ -21,7 +25,6 @@ let g:vimwiki_list = [wiki_1]
 let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
 
 " Colors.
-syntax enable
 set background=dark
 colorscheme slate
 hi Statement ctermfg=LightCyan
@@ -60,7 +63,7 @@ set autoread
 
 " Hotkeys.
 " Custom mapleader.
-:let mapleader = ","
+let mapleader = ","
 " Map a latex compile button.
 map <leader>ll :w !latexmk -silent -pdf % <enter>
 map <leader>vs :w !/opt/vertica/bin/vsql -h vertica.csnzoo.com Wayfair ryi -f % <enter>
@@ -80,7 +83,7 @@ vnoremap // y/<C-R>"<CR>
 au BufNewFile,BufRead *.tex set spell
 
 " Set paste hotkey.
-set pastetoggle=<F3>
+set pastetoggle=<F2>
 
 " Let gf detect python files.
 filetype plugin on
