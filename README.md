@@ -1,5 +1,5 @@
-## dotfiles
-Dot-files and configuration files. 
+# dotfiles
+Dot-files and configuration files.
 
 ## Fresh install on Windows (as of 2018-09-30)
 
@@ -13,11 +13,13 @@ Dot-files and configuration files.
 7. Run `virtualenv -p python3 default` within this folder.
 
 ### Extras
-1. Install vimwiki (make sure to do this after moving the `.vimrc` file over -- this contains instructions to create two vimwiki drives for work and personal).
-2. Install jupyter-nb-extensions.
-3. Install jupyter-vim-binding.
+1. Install vim-plug.
+2. Rename directory `vimwiki-personal` in `.vimrc` to whatever you want it to be. Or, add another!
+3. Install vimwiki by running `:PlugInstall` in vim (make sure to do this after moving the `.vimrc` file over -- this contains instructions to create two vimwiki drives for work and personal).
+4. Install jupyter-nb-extensions.
+5. Install jupyter-vim-binding.
 
 ## Notes
-* Don't save important non-git-associated files in `~/` -- this directory will be deleted upon uninstall of Ubuntu. Use the `/mnt/c/Users/USERNAME` directory instead.
+* If using WSL, don't save important non-git-associated files in `~/` -- this directory will be deleted upon uninstall of Ubuntu. Use the `/mnt/c/Users/USERNAME` directory instead.
 
 
