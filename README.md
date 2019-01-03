@@ -18,6 +18,7 @@ Dot-files and configuration files.
 3. Install vimwiki by running `:PlugInstall` in vim (make sure to do this after moving the `.vimrc` file over -- this contains instructions to create two vimwiki drives for work and personal).
 4. Install jupyter-nb-extensions.
 5. Install jupyter-vim-binding.
+6. Add an auto add, commit, push command, `git acp`, by running: `git config --global alias.acp '!git add -A && git commit -a -m "Automatic add, commit, push." && git push`.
 
 ## Notes
 * If using WSL, don't save important non-git-associated files in `~/` -- this directory will be deleted upon uninstall of Ubuntu. Use the `/mnt/c/Users/USERNAME` directory instead.
