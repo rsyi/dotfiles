@@ -54,8 +54,8 @@ set wrap
 " Keeps words together at linebreak.
 set linebreak
 
-" Line numbers.
-" set nu
+" Line numbers hybrid.
+set nu rnu
 
 " Window dressing.
 " If a file is changed while vim has it open, and vim doesn't have unsaved changes, automatically reload file.
