@@ -16,9 +16,10 @@ Dot-files and configuration files.
 1. Install vim-plug.
 2. Rename directory `vimwiki-personal` in `.vimrc` to whatever you want it to be. Or, add another!
 3. Install vimwiki by running `:PlugInstall` in vim (make sure to do this after moving the `.vimrc` file over -- this contains instructions to create two vimwiki drives for work and personal).
-4. Install jupyter-nb-extensions.
-5. Install jupyter-vim-binding.
-6. Add an auto add, commit, push command, `git acp`, by running: `git config --global alias.acp '!git add -A && git commit -a -m "Automatic add, commit, push." && git push`.
+4. Run `pip install python-language-server`, restart terminal, then install vim-lsp.
+5. Install jupyter-nb-extensions.
+6. Install jupyter-vim-binding.
+7. Add an auto add, commit, push command, `git acp`, by running: `git config --global alias.acp '!git add -A && git commit -a -m "Automatic add, commit, push." && git push`.
 
 ## Notes
 * If using WSL, don't save important non-git-associated files in `~/` -- this directory will be deleted upon uninstall of Ubuntu. Use the `/mnt/c/Users/USERNAME` directory instead.
