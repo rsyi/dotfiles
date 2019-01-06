@@ -1,0 +1,2 @@
+set -o vi
+alias activate_default="source ~/venvs/default/bin/activate"
