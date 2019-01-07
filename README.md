@@ -25,7 +25,7 @@ Dot-files and configuration files.
 3. Install vim-plug, following git repo instructions https://github.com/junegunn/vim-plug .
 4. Rename directory `vimwiki-personal` in `.vimrc` to whatever you want it to
    be. Optionally, add another for work.
-5. Run `pip install python-language-server`.
+5. Run `pip3 install python-language-server`.
 6. Run `:PlugInstall` in vim, to install vim-lsp, vimwiki.
 
 ## Notes

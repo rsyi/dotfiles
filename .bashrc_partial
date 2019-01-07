@@ -1,2 +1,5 @@
 set -o vi
 alias activate_default="source ~/venvs/default/bin/activate"
+alias v="nvim"
+alias vi="nvim"
+alias vim="nvim"
