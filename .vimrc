@@ -48,10 +48,6 @@ if executable('pyls')
         \ })
 endif
 
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
-
 " Colors.
 set background=dark
 colorscheme slate
@@ -139,5 +135,9 @@ function! MathAndLiquid()
     hi link math_block Function
 endfunction
 
-" Call everytime we open a Markdown file
+" Call everytime we open a Markdown file.
 autocmd BufRead,BufNewFile,BufEnter *.md,*.markdown call MathAndLiquid()
+
+" Datetime hotkey for vimwiki.
+nnoremap <F5> "=strftime("%b %d, %Y")<CR>P
+inoremap <F5> <C-R>=strftime("%b %d, %Y")<CR>
