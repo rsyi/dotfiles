@@ -92,14 +92,6 @@ let mapleader = ","
 map <leader>ll :w !latexmk -silent -pdf % <enter>
 map <leader>vs :w !/opt/vertica/bin/vsql -h vertica.csnzoo.com Wayfair ryi -f % <enter>
 
-" Remap gj, gj (display line movement) to j, k.
-noremap <buffer> <silent> k gk
-noremap <buffer> <silent> j gj
-" Also remap 0 and $ so they go to the end of the display line, rather than
-" the paragraph.
-noremap <buffer> <silent> 0 g0
-noremap <buffer> <silent> $ g$
-
 " Allows `//` to visually search for selected text.
 vnoremap // y/<C-R>"<CR>
 
