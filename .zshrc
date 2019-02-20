@@ -99,3 +99,5 @@ export TERM=xterm-256color
 
 alias cd0="cd /mnt/c/Users/rober/"
 alias activate_default="source ~/venvs/default/bin/activate"
+
+alias v="nvim"
