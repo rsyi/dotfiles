@@ -28,5 +28,14 @@ Dot-files and configuration files.
 5. Run `pip3 install python-language-server`.
 6. Run `:PlugInstall` in vim, to install vim-lsp, vimwiki.
 
+#### Vimwiki Links in Browser
+Add the line:
+`export BROWSER='/mnt/c/Program Files (x86)/Google/Chrome/Application/chrome.exe'`
+to your `.zshrc` file in order to open links in chrome (or whatever browser you want to use). By default, I've already added it to my `.zshrc` file within this repo, but you might want to change the path according to your default browser.
+
+Unfortunately, however, this doesn't work out of the box for the reasons laid out here: https://github.com/Microsoft/WSL/issues/1766 (at least as of 2019-03-27). Basically, `xdg-open`, which is used by `vimwiki` by default, hates spaces. To fix this, you can go directly into the executable file for `xdg-open` in `/usr/bin/xdg-open` and quote instances of `$browser$`, replacing them with `"$browser"` (around line 840).
+
 ## Notes
 * If using WSL, don't save important non-git-associated files in `~/` -- this directory will be deleted upon uninstall of Ubuntu. Use the `/mnt/c/Users/USERNAME` directory instead.
+
+
