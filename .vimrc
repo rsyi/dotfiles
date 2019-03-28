@@ -80,6 +80,8 @@ set linebreak
 
 " Line numbers hybrid.
 set nu rnu
+" Command to toggle on/off.
+noremap <F3> :set nu! rnu!<CR>
 
 " Window dressing.
 " If a file is changed while vim has it open, and vim doesn't have unsaved changes, automatically reload file.
