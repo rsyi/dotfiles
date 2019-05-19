@@ -48,6 +48,10 @@ if executable('pyls')
         \ })
 endif
 
+" Vimlsp hotkeys.
+nnoremap <silent> gd :LspDefinition<CR>
+nnoremap <silent> gr :LspReferences<CR>
+
 " Colors.
 set background=dark
 colorscheme slate
