@@ -1,6 +1,6 @@
 # Comment
 PROMPT='%{$fg[yellow]%}[%c] %{$reset_color%}'
-RPROMPT='%{$fg_bold[grey]%}@$HOST %{$reset_color%} %{$fg[magenta]%}$(git_prompt_info)%{$reset_color%} $(git_prompt_status)%{$reset_color%}'
+RPROMPT='%{$fg_bold[grey]%}@$HOST %{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX=""
 ZSH_THEME_GIT_PROMPT_SUFFIX=""
