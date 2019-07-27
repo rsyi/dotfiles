@@ -21,7 +21,7 @@ syntax on
 " Currently, this is only set up for one vimwiki directory.
 " For work, add `wiki_2` following the instructions here:
 " https://opensource.com/article/18/6/vimwiki-gitlab-notes
-let g:vimwiki_list = [{'path': '~/vimwiki-airbnb', 'syntax': 'markdown', 'ext': ''}]
+let g:vimwiki_list = [{'path': '~/vimwiki-airbnb', 'syntax': 'markdown', 'ext': '.md'}]
 let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
 let g:vimwiki_url_maxsave=0
 let g:vimwiki_global_ext=0
@@ -71,7 +71,10 @@ set tabstop=4
 set shiftwidth=4
 set autoindent
 " Two spaces for HTML files.
-autocmd FileType html :setlocal sw=2 ts=2 sts=2
+au FileType html :setlocal sw=2 ts=2 sts=2
+" Hive syntax: 'hive' needs to exist in `~/.vim/syntax` for this to work (google "hive vim").
+au BufRead,BufNewFile,BufEnter *.hql,*.sql set filetype=hive ts=2 sw=2
+
 
 " Word-wrapping.
 " Wraps visually, without newlines.
@@ -139,3 +142,26 @@ inoremap <F5> <C-R>=strftime("%b %d, %Y")<CR>
 
 " Automatically set working directory to current file.
 set autochdir
+
+" Following vimwiki docs, use vfile in links to allow for non-.md files to be opened.
+function! VimwikiLinkHandler(link)
+  " Use Vim to open external files with the 'vfile:' scheme.  E.g.:
+  "   1) [[vfile:~/Code/PythonProject/abc123.py]]
+  "   2) [[vfile:./|Wiki Home]]
+  let link = a:link
+  if link =~# '^vfile:'
+    let link = link[1:]
+  else
+    return 0
+  endif
+  let link_infos = vimwiki#base#resolve_link(link)
+  if link_infos.filename == ''
+    echomsg 'Vimwiki Error: Unable to resolve link!'
+    return 0
+  else
+    exe 'e' . fnameescape(link_infos.filename)
+    return 1
+  endif
+endfunction
+
+
