@@ -59,7 +59,7 @@ ZSH_THEME="ryi"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  vi-mode
+  vi-mode ssh-agent
 )
 
 source $ZSH/oh-my-zsh.sh
