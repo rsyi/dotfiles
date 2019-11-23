@@ -1,5 +1,5 @@
 " vim-plug
-" Install vim-plug if it doesn't exist.
+"get_config Install vim-plug if it doesn't exist.
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -28,7 +28,10 @@ syntax on
 " Currently, this is only set up for one vimwiki directory.
 " For work, add `wiki_2` following the instructions here:
 " https://opensource.com/article/18/6/vimwiki-gitlab-notes
-let g:vimwiki_list = [{'path': '~/vimwiki-airbnb', 'syntax': 'markdown', 'ext': '.md'}]
+let g:vimwiki_list = [
+    \ {'path': '~/vimwiki-dataframe', 'syntax': 'markdown', 'ext': '.md'},
+    \ {'path': '~/vimwiki', 'syntax': 'markdown', 'ext': '.md'}
+    \ ]
 let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
 let g:vimwiki_url_maxsave=0
 let g:vimwiki_global_ext=0
@@ -77,11 +80,13 @@ set tabstop=4
 " Indentation uses shiftwidth. Pressing tab uses tabstop.
 set shiftwidth=4
 set autoindent
+" Prevent weird 8 space tabs in python files.
+autocmd FileType python setlocal tabstop=4
 " Two spaces for HTML files.
 au FileType html :setlocal sw=2 ts=2 sts=2
 " Hive syntax: 'hive' needs to exist in `~/.vim/syntax` for this to work (google "hive vim").
 au BufRead,BufNewFile,BufEnter *.hql,*.sql set filetype=hive ts=2 sw=2
-
+au BufRead,BufNewFile,BufEnter *.yaml setlocal ts=2 sw=2
 
 " Word-wrapping.
 " Wraps visually, without newlines.
@@ -103,7 +108,6 @@ set autoread
 let mapleader = ","
 " Map a latex compile button.
 map <leader>ll :w !latexmk -silent -pdf % <enter>
-map <leader>vs :w !/opt/vertica/bin/vsql -h vertica.csnzoo.com Wayfair ryi -f % <enter>
 
 " Allows `//` to visually search for selected text.
 vnoremap // y/<C-R>"<CR>
@@ -171,4 +175,5 @@ function! VimwikiLinkHandler(link)
   endif
 endfunction
 
-
+nnoremap <C-j> :VimwikiDiaryNextDay<CR>
+nnoremap <C-k> :VimwikiDiaryPrevDay<CR>
