@@ -13,6 +13,7 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 
 " Custom plugins.
 Plug 'vimwiki/vimwiki'
+Plug 'metakirby5/codi.vim'
 " vim-lsp
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
@@ -85,7 +86,7 @@ autocmd FileType python setlocal tabstop=4
 " Two spaces for HTML files.
 au FileType html :setlocal sw=2 ts=2 sts=2
 " Hive syntax: 'hive' needs to exist in `~/.vim/syntax` for this to work (google "hive vim").
-au BufRead,BufNewFile,BufEnter *.hql,*.sql set filetype=hive ts=2 sw=2
+au BufRead,BufNewFile,BufEnter *.hql,*.sql set filetype=sql ts=2 sw=2
 au BufRead,BufNewFile,BufEnter *.yaml setlocal ts=2 sw=2
 
 " Word-wrapping.
