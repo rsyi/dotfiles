@@ -14,6 +14,7 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Custom plugins.
 Plug 'vimwiki/vimwiki'
 Plug 'metakirby5/codi.vim'
+Plug 'junegunn/goyo.vim'
 " vim-lsp
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
@@ -147,6 +148,31 @@ endfunction
 
 " Call everytime we open a Markdown file.
 autocmd BufRead,BufNewFile,BufEnter *.md,*.markdown call MathAndLiquid()
+
+" Call Goyo whenever we run a vimwiki file.
+autocmd BufRead,BufNewFile */vimwiki*.md :Goyo 80
+
+" Make :q quit goyo.
+function! s:goyo_enter()
+  let b:quitting = 0
+  let b:quitting_bang = 0
+  autocmd QuitPre <buffer> let b:quitting = 1
+  cabbrev <buffer> q! let b:quitting_bang = 1 <bar> q!
+endfunction
+
+function! s:goyo_leave()
+  " Quit Vim if this is the only remaining buffer
+  if b:quitting && len(filter(range(1, bufnr('$')), 'buflisted(v:val)')) == 1
+    if b:quitting_bang
+      qa!
+    else
+      qa
+    endif
+  endif
+endfunction
+
+autocmd! User GoyoEnter call <SID>goyo_enter()
+autocmd! User GoyoLeave call <SID>goyo_leave()
 
 " Datetime hotkey for vimwiki.
 nnoremap <F5> "=strftime("%b %d, %Y")<CR>P
