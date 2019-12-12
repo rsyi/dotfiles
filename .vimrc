@@ -1,65 +1,27 @@
-" vim-plug
-"get_config Install vim-plug if it doesn't exist.
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Maintainer: Robert Yi (github.com/rsyi)
+"
+" This is my personal vimrc setup.
+"
+" Index:
+"   - General
+"   - Install plugins
+"   - Plugin: vimwiki
+"   - Plugin: vim-lsp
+"   - Custom: latex math syntax highlighting
+"   - Plugin: Goyo
+"   - Hotkeys
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-call plug#begin()
-Plug 'tpope/vim-sensible'
-" On-demand loading
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 
-" Custom plugins.
-Plug 'vimwiki/vimwiki'
-Plug 'metakirby5/codi.vim'
-Plug 'junegunn/goyo.vim'
-" vim-lsp
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-call plug#end()
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" vimwiki customizations.
-" Required.
 set nocompatible
-filetype plugin on
-syntax on
-" Currently, this is only set up for one vimwiki directory.
-" For work, add `wiki_2` following the instructions here:
-" https://opensource.com/article/18/6/vimwiki-gitlab-notes
-let g:vimwiki_list = [
-    \ {'path': '~/vimwiki-dataframe', 'syntax': 'markdown', 'ext': '.md'},
-    \ {'path': '~/vimwiki', 'syntax': 'markdown', 'ext': '.md'}
-    \ ]
-let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
-let g:vimwiki_url_maxsave=0
-let g:vimwiki_global_ext=0
-
-" vim-lsp registration.
-if executable('pyls')
-    " pip install python-language-server
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pyls']},
-        \ 'whitelist': ['python'],
-        \ })
-endif
-" Asyncomplete source registration.
-if executable('pyls')
-    " pip install python-language-server
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pyls']},
-        \ 'whitelist': ['python'],
-        \ })
-endif
-
-" Vimlsp hotkeys.
-nnoremap <silent> gd :LspDefinition<CR>
-nnoremap <silent> gr :LspReferences<CR>
+filetype plugin on  " Necessary for auto file detection.
+syntax on  " Enable syntax highlighting.
 
 " Colors.
 set background=dark
@@ -105,24 +67,120 @@ noremap <F3> :set nu! rnu!<CR>
 " If a file is changed while vim has it open, and vim doesn't have unsaved changes, automatically reload file.
 set autoread
 
-" Hotkeys.
-" Custom mapleader.
-let mapleader = ","
-" Map a latex compile button.
-map <leader>ll :w !latexmk -silent -pdf % <enter>
-
-" Allows `//` to visually search for selected text.
-vnoremap // y/<C-R>"<CR>
-
 " Spell-check.
 au BufNewFile,BufRead *.tex set spell
 
-" Set paste hotkey.
-set pastetoggle=<F2>
+" Automatically set working directory to current file.
+set autochdir
 
-" Let gf detect python files.
-filetype plugin on
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Install plugins
+"
+"    vim-plug is automatically if it doesn't exist. All plugins are then
+"    installed using vim-plug.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Install vim-plug if it doesn't exist.
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+call plug#begin()
+
+" Better defaults: backspace through lines, search dynamically.
+Plug 'tpope/vim-sensible'
+
+" Improved file tree.
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+
+" Wiki for vim (for note-taking).
+Plug 'vimwiki/vimwiki'
+
+" Dynamic hacker coding (a la jupyter).
+Plug 'metakirby5/codi.vim'
+
+" Easier visual mode.
+Plug 'junegunn/goyo.vim'
+Plug 'mhinz/vim-startify'
+" vim-lsp
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+call plug#end()
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: vimwiki
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Currently, this is only set up for one vimwiki directory.
+" For work, add `wiki_2` following the instructions here:
+" https://opensource.com/article/18/6/vimwiki-gitlab-notes
+let g:vimwiki_list = [
+    \ {'path': '~/vimwiki-dataframe', 'syntax': 'markdown', 'ext': '.md'},
+    \ {'path': '~/vimwiki', 'syntax': 'markdown', 'ext': '.md'}
+    \ ]
+let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
+let g:vimwiki_url_maxsave=0
+let g:vimwiki_global_ext=0
+
+" Following vimwiki docs, use vfile in links to allow for non-.md files to be opened.
+function! VimwikiLinkHandler(link)
+  " Use Vim to open external files with the 'vfile:' scheme.  E.g.:
+  "   1) [[vfile:~/Code/PythonProject/abc123.py]]
+  "   2) [[vfile:./|Wiki Home]]
+  let link = a:link
+  if link =~# '^vfile:'
+    let link = link[1:]
+  else
+    return 0
+  endif
+  let link_infos = vimwiki#base#resolve_link(link)
+  if link_infos.filename == ''
+    echomsg 'Vimwiki Error: Unable to resolve link!'
+    return 0
+  else
+    exe 'e' . fnameescape(link_infos.filename)
+    return 1
+  endif
+endfunction
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: vim-lsp
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" vim-lsp registration.
+if executable('pyls')
+    " pip install python-language-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
+" Asyncomplete source registration.
+if executable('pyls')
+    " pip install python-language-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Custom: latex math syntax highlighting
+"
+"   Enables automatic syntax highlighting of LaTeX math blocks in markdown
+"   files.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Allow for LaTeX formatting of math blocks in Sphinx.
 function! MathAndLiquid()
     "" Define certain regions
     " Block math. Look for "$$[anything]$$"
@@ -149,58 +207,62 @@ endfunction
 " Call everytime we open a Markdown file.
 autocmd BufRead,BufNewFile,BufEnter *.md,*.markdown call MathAndLiquid()
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: Goyo
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Quit Goyo when we leave .md files.
+" autocmd BufLeave */vimwiki*.md :Goyo!
+
 " Call Goyo whenever we run a vimwiki file.
-autocmd BufRead,BufNewFile */vimwiki*.md :Goyo 80
+"" autocmd BufRead,BufNewFile */vimwiki*.md :Goyo 80
 
-" Make :q quit goyo.
-function! s:goyo_enter()
-  let b:quitting = 0
-  let b:quitting_bang = 0
-  autocmd QuitPre <buffer> let b:quitting = 1
-  cabbrev <buffer> q! let b:quitting_bang = 1 <bar> q!
-endfunction
+" Quitting whether Goyo is active or not
+"" ca wq :w<cr>:call Quit()<cr>
+"" ca q :call Quit()<cr>
+"" function! Quit()
+""     if exists('#goyo')
+""         Goyo
+""     endif
+""     quit
+"" endfunction
 
-function! s:goyo_leave()
-  " Quit Vim if this is the only remaining buffer
-  if b:quitting && len(filter(range(1, bufnr('$')), 'buflisted(v:val)')) == 1
-    if b:quitting_bang
-      qa!
-    else
-      qa
-    endif
-  endif
-endfunction
 
-autocmd! User GoyoEnter call <SID>goyo_enter()
-autocmd! User GoyoLeave call <SID>goyo_leave()
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Hotkeys
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Datetime hotkey for vimwiki.
+" Custom mapleader.
+let mapleader = ","
+
+" Latex compile.
+map <leader>ll :w !latexmk -silent -pdf % <enter>
+
+" Allows `//` to visually search for selected text.
+vnoremap // y/<C-R>"<CR>
+
+" Paste toggle.
+set pastetoggle=<F2>
+
+" Vimwiki diary navigation.
+nnoremap <C-j> :VimwikiDiaryNextDay<CR>
+nnoremap <C-k> :VimwikiDiaryPrevDay<CR>
+
+" Goyo toggle.
+nmap <Leader>g :Goyo<CR>
+
+" NERDTree toggle.
+map <C-n> :NERDTreeToggle<CR>
+
+" Buffer management.
+nmap <Leader>bb :ls<CR>:buffer<Space>
+
+" Print datetime.
 nnoremap <F5> "=strftime("%b %d, %Y")<CR>P
 inoremap <F5> <C-R>=strftime("%b %d, %Y")<CR>
 
-" Automatically set working directory to current file.
-set autochdir
+" vim-lsp definition and references.
+nnoremap <silent> gd :LspDefinition<CR>
+nnoremap <silent> gr :LspReferences<CR>
 
-" Following vimwiki docs, use vfile in links to allow for non-.md files to be opened.
-function! VimwikiLinkHandler(link)
-  " Use Vim to open external files with the 'vfile:' scheme.  E.g.:
-  "   1) [[vfile:~/Code/PythonProject/abc123.py]]
-  "   2) [[vfile:./|Wiki Home]]
-  let link = a:link
-  if link =~# '^vfile:'
-    let link = link[1:]
-  else
-    return 0
-  endif
-  let link_infos = vimwiki#base#resolve_link(link)
-  if link_infos.filename == ''
-    echomsg 'Vimwiki Error: Unable to resolve link!'
-    return 0
-  else
-    exe 'e' . fnameescape(link_infos.filename)
-    return 1
-  endif
-endfunction
-
-nnoremap <C-j> :VimwikiDiaryNextDay<CR>
-nnoremap <C-k> :VimwikiDiaryPrevDay<CR>
