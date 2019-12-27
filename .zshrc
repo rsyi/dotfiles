@@ -106,4 +106,4 @@ alias v="nvim"
 
 # Kubernetes
 alias k="kubectl"
-[ -f ~/.kubectl_aliases ] && source ~/.kubectl_aliases
+alias kg="kubectl get"
