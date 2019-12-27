@@ -1,3 +1,4 @@
+. ~/repos/z/z.sh
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -99,6 +100,10 @@ export TERM=xterm-256color
 export BROWSER='/mnt/c/Program Files (x86)/Google/Chrome/Application/chrome.exe'
 
 alias cd0="cd /mnt/c/Users/rober/"
-alias activate_default="source ~/venvs/default/bin/activate"
+alias act="source ~/envs/default/bin/activate"
 
 alias v="nvim"
+
+# Kubernetes
+alias k="kubectl"
+[ -f ~/.kubectl_aliases ] && source ~/.kubectl_aliases

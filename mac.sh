@@ -1,4 +1,8 @@
-# Once ssh keys for github are set up and this repo is cloned into ~/repos.
+# Prerequisites:
+# - ssh keys for github are set up and this repo is cloned into ~/repos
+# - brew is installed.
+# Once this is complete, run `. mac.sh`.
+
 # Set up vim.
 cp ~/repos/dotfiles/.vimrc ~/.vimrc
 brew install neovim
@@ -32,3 +36,10 @@ pip3 install awscli --upgrade --user
 brew install tmux
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 cp ~/repos/dotfiles/.tmux.conf ~/.tmux.conf
+
+# Set up kubectl.
+brew install kubectl
+git clone git@github.com:ahmetb/kubectl-aliases.git ~/repos/kubectl-aliases/
+cp ~/repos/kubectl-aliases/.kubectl_aliases ~/
+
+
