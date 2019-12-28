@@ -39,7 +39,6 @@ cp ~/repos/dotfiles/.tmux.conf ~/.tmux.conf
 
 # Set up kubectl.
 brew install kubectl
-git clone git@github.com:ahmetb/kubectl-aliases.git ~/repos/kubectl-aliases/
-cp ~/repos/kubectl-aliases/.kubectl_aliases ~/
 
-
+# Set up typescript-language-server.
+npm install -g typescript typescript-language-server
