@@ -101,6 +101,10 @@ Plug 'vimwiki/vimwiki'
 " Dynamic hacker coding (a la jupyter).
 Plug 'metakirby5/codi.vim'
 
+" React js syntax highlighting.
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+
 " Easier visual mode.
 Plug 'junegunn/goyo.vim'
 Plug 'mhinz/vim-startify'
