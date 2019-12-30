@@ -157,7 +157,7 @@ endfunction
 " Plugin: vim-lsp
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" vim-lsp registration.
+" python registration.
 if executable('pyls')
     " pip install python-language-server
     au User lsp_setup call lsp#register_server({
@@ -175,6 +175,18 @@ if executable('pyls')
         \ 'whitelist': ['python'],
         \ })
 endif
+
+
+" typescript registration.
+if executable('typescript-language-server')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'typescript-language-server',
+        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+        \ 'whitelist': ['typescript', 'typescript.tsx'],
+        \ })
+endif
+
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -261,6 +273,8 @@ map <C-n> :NERDTreeToggle<CR>
 
 " Buffer management.
 nmap <Leader>bb :ls<CR>:buffer<Space>
+nmap <Leader>bp :bprev<CR>
+nmap <Leader>bn :bnext<CR>
 
 " Print datetime.
 nnoremap <F5> "=strftime("%b %d, %Y")<CR>P
