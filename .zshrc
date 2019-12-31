@@ -99,11 +99,21 @@ export TERM=xterm-256color
 
 export BROWSER='/mnt/c/Program Files (x86)/Google/Chrome/Application/chrome.exe'
 
-alias cd0="cd /mnt/c/Users/rober/"
 alias act="source ~/envs/default/bin/activate"
 
 alias v="nvim"
 
-# Kubernetes
+# Kubernetes aliases.
 alias k="kubectl"
 alias kg="kubectl get"
+alias kgss="kubectl get statefulset"
+alias kgpo="kubectl get pod"
+alias kgdep="kubectl get deploy"
+
+# Git aliases.
+alias gst="git status"
+
+# Lengthen the history - this needs to be at the bottom.
+HISTSIZE=999999999
+SAVEHIST=$HISTSIZE
+
