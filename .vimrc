@@ -18,7 +18,6 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 set nocompatible
 filetype plugin on  " Necessary for auto file detection.
 syntax on  " Enable syntax highlighting.
@@ -28,6 +27,11 @@ set background=dark
 colorscheme slate
 hi Statement ctermfg=LightCyan
 hi Comment ctermfg=Yellow cterm=bold
+hi LineNr ctermfg=darkblue
+hi Search ctermbg=darkblue
+hi VertSplit ctermfg=black ctermbg=black
+hi EndOfBuffer ctermfg=black
+
 " Font.
 set guifont=DejaVu\ Sans\ Mono\ 10
 " Show trailing whitespace.
@@ -128,7 +132,7 @@ call plug#end()
 " https://opensource.com/article/18/6/vimwiki-gitlab-notes
 let g:vimwiki_list = [
     \ {'path': '~/vimwiki-dataframe', 'syntax': 'markdown', 'ext': '.md'},
-    \ {'path': '~/vimwiki', 'syntax': 'markdown', 'ext': '.md'}
+    \ {'path': '~/vimwiki-personal', 'syntax': 'markdown', 'ext': '.md'}
     \ ]
 let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
 let g:vimwiki_url_maxsave=0
@@ -247,6 +251,8 @@ autocmd BufRead,BufNewFile,BufEnter *.md,*.markdown call MathAndLiquid()
 ""     quit
 "" endfunction
 
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: vim-test
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -294,4 +300,7 @@ inoremap <F5> <C-R>=strftime("%b %d, %Y")<CR>
 " vim-lsp definition and references.
 nnoremap <silent> gd :LspDefinition<CR>
 nnoremap <silent> gr :LspReferences<CR>
-
+nnoremap <silent> gp :LspPeekDefinition<CR>
+let g:lsp_virtual_text_enabled = 0
+let g:lsp_diagnostics_enabled = 0
+let g:lsp_highlight_references_enabled = 1
