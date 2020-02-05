@@ -26,7 +26,7 @@ syntax on  " Enable syntax highlighting.
 set background=dark
 colorscheme slate
 hi Statement ctermfg=LightCyan
-hi Comment ctermfg=Yellow cterm=bold
+hi Comment ctermfg=darkgrey cterm=bold
 hi LineNr ctermfg=darkblue
 hi Search ctermbg=darkblue
 hi VertSplit ctermfg=black ctermbg=black
