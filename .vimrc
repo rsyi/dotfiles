@@ -159,6 +159,9 @@ function! VimwikiLinkHandler(link)
   endif
 endfunction
 
+" To allow for completed objects to be a diff color.
+let g:vimwiki_hl_cb_checked = 2
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: vim-lsp
@@ -193,6 +196,10 @@ if executable('typescript-language-server')
         \ 'whitelist': ['typescript', 'typescript.tsx'],
         \ })
 endif
+
+" let g:lsp_virtual_text_enabled = 0
+let g:lsp_diagnostics_enabled = 0
+" let g:asyncomplete_auto_popup = 0
 
 
 
@@ -301,6 +308,8 @@ inoremap <F5> <C-R>=strftime("%b %d, %Y")<CR>
 nnoremap <silent> gd :LspDefinition<CR>
 nnoremap <silent> gr :LspReferences<CR>
 nnoremap <silent> gp :LspPeekDefinition<CR>
-let g:lsp_virtual_text_enabled = 0
-let g:lsp_diagnostics_enabled = 0
+nnoremap <silent> gh :LspHover<CR>
 let g:lsp_highlight_references_enabled = 1
+
+" Autoclose preview window when completion done.
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
