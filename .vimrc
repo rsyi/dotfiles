@@ -31,6 +31,7 @@ hi LineNr ctermfg=darkblue
 hi Search ctermbg=darkblue
 hi VertSplit ctermfg=black ctermbg=black
 hi EndOfBuffer ctermfg=black
+hi IncSearch ctermfg=black
 
 " Font.
 set guifont=DejaVu\ Sans\ Mono\ 10
