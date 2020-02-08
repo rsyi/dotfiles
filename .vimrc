@@ -4,15 +4,103 @@
 " This is my personal vimrc setup.
 "
 " Index:
-"   - General
 "   - Install plugins
-"   - Plugin: vimwiki
 "   - Plugin: vim-lsp
+"   - General
+"   - Plugin: vimwiki
 "   - Custom: latex math syntax highlighting
 "   - Plugin: Goyo
 "   - Hotkeys
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Install plugins
+"
+"    vim-plug is automatically if it doesn't exist. All plugins are then
+"    installed using vim-plug.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Install vim-plug if it doesn't exist.
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+call plug#begin()
+
+" vim-lsp
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+
+" Better defaults: backspace through lines, search dynamically.
+Plug 'tpope/vim-sensible'
+
+" Improved file tree.
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+
+" Wiki for vim (for note-taking).
+Plug 'vimwiki/vimwiki'
+
+" Dynamic hacker coding (a la jupyter).
+Plug 'metakirby5/codi.vim'
+
+" React js syntax highlighting.
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+
+" Easier visual mode.
+Plug 'junegunn/goyo.vim'
+Plug 'mhinz/vim-startify'
+
+" vim-test.
+Plug 'janko/vim-test'
+
+call plug#end()
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: vim-lsp
+"
+"    Putting this first, so python language server starts up quickly.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" python registration.
+if executable('pyls')
+    " pip install python-language-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
+" Asyncomplete source registration.
+if executable('pyls')
+    " pip install python-language-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
+
+
+" typescript registration.
+if executable('typescript-language-server')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'typescript-language-server',
+        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+        \ 'whitelist': ['typescript', 'typescript.tsx'],
+        \ })
+endif
+
+let g:lsp_virtual_text_enabled = 0
+let g:lsp_diagnostics_enabled = 0
+" let g:asyncomplete_auto_popup = 0
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -79,50 +167,7 @@ au BufNewFile,BufRead *.tex set spell
 set autochdir
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Install plugins
-"
-"    vim-plug is automatically if it doesn't exist. All plugins are then
-"    installed using vim-plug.
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Install vim-plug if it doesn't exist.
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-call plug#begin()
-
-" Better defaults: backspace through lines, search dynamically.
-Plug 'tpope/vim-sensible'
-
-" Improved file tree.
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-
-" Wiki for vim (for note-taking).
-Plug 'vimwiki/vimwiki'
-
-" Dynamic hacker coding (a la jupyter).
-Plug 'metakirby5/codi.vim'
-
-" React js syntax highlighting.
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
-
-" Easier visual mode.
-Plug 'junegunn/goyo.vim'
-Plug 'mhinz/vim-startify'
-" vim-lsp
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-
-" vim-test.
-Plug 'janko/vim-test'
-
-call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: vimwiki
@@ -163,44 +208,6 @@ endfunction
 " To allow for completed objects to be a diff color.
 let g:vimwiki_hl_cb_checked = 2
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugin: vim-lsp
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" python registration.
-if executable('pyls')
-    " pip install python-language-server
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pyls']},
-        \ 'whitelist': ['python'],
-        \ })
-endif
-" Asyncomplete source registration.
-if executable('pyls')
-    " pip install python-language-server
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pyls']},
-        \ 'whitelist': ['python'],
-        \ })
-endif
-
-
-" typescript registration.
-if executable('typescript-language-server')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'typescript-language-server',
-        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-        \ 'whitelist': ['typescript', 'typescript.tsx'],
-        \ })
-endif
-
-" let g:lsp_virtual_text_enabled = 0
-let g:lsp_diagnostics_enabled = 0
-" let g:asyncomplete_auto_popup = 0
 
 
 
