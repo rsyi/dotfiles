@@ -110,6 +110,11 @@ set nocompatible
 filetype plugin on  " Necessary for auto file detection.
 syntax on  " Enable syntax highlighting.
 
+" Allow for scrolling.
+set mouse=a
+map <ScrollWheelUp> <C-Y>
+map <ScrollWheelDown> <C-E>
+
 " Colors.
 set background=dark
 colorscheme slate
@@ -286,6 +291,9 @@ let mapleader = ","
 
 " Latex compile.
 map <leader>ll :w !latexmk -silent -pdf % <enter>
+
+" Python.
+nnoremap <buffer> <leader>z :exec '!python' shellescape(@%, 1)<cr>
 
 " Allows `//` to visually search for selected text.
 vnoremap // y/<C-R>"<CR>
