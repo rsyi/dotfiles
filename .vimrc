@@ -59,6 +59,9 @@ Plug 'mhinz/vim-startify'
 " vim-test.
 Plug 'janko/vim-test'
 
+" vim-blame.
+Plug 'tveskag/nvim-blame-line'
+
 call plug#end()
 
 
@@ -121,10 +124,11 @@ colorscheme slate
 hi Statement ctermfg=LightCyan
 hi Comment ctermfg=darkgrey cterm=bold
 hi LineNr ctermfg=darkblue
-hi Search ctermbg=darkblue
+hi Search ctermbg=white ctermfg=black
 hi VertSplit ctermfg=black ctermbg=black
 hi EndOfBuffer ctermfg=black
 hi IncSearch ctermfg=black
+hi Visual ctermfg=LightYellow ctermbg=black
 
 " Font.
 set guifont=DejaVu\ Sans\ Mono\ 10
@@ -283,6 +287,13 @@ nmap <silent> t<C-l> :TestLast<CR>
 nmap <silent> t<C-g> :TestVisit<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: nvim-blame-line
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <silent> <leader>b :ToggleBlameLine<CR>
+autocmd BufEnter * EnableBlameLine
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Hotkeys
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -293,7 +304,7 @@ let mapleader = ","
 map <leader>ll :w !latexmk -silent -pdf % <enter>
 
 " Python.
-nnoremap <buffer> <leader>z :exec '!python' shellescape(@%, 1)<cr>
+autocmd FileType python nnoremap <buffer> <leader>z :exec '!python' shellescape(@%, 1)<cr>
 
 " Allows `//` to visually search for selected text.
 vnoremap // y/<C-R>"<CR>
