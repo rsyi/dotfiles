@@ -62,6 +62,10 @@ Plug 'janko/vim-test'
 " vim-blame.
 Plug 'tveskag/nvim-blame-line'
 
+" fuzzy finder.
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
 call plug#end()
 
 
@@ -175,7 +179,8 @@ au BufNewFile,BufRead *.tex set spell
 " Automatically set working directory to current file.
 set autochdir
 
-
+" Custom mapleader.
+let mapleader = ","
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -286,19 +291,35 @@ nmap <silent> t<C-s> :TestSuite<CR>
 nmap <silent> t<C-l> :TestLast<CR>
 nmap <silent> t<C-g> :TestVisit<CR>
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: nvim-blame-line
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <silent> <leader>b :ToggleBlameLine<CR>
-autocmd BufEnter * EnableBlameLine
+" autocmd BufEnter * EnableBlameLine
+nmap <Leader>bx :ToggleBlameLine<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: fzf
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Mapping selecting mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" Insert mode completion
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+
+" Advanced customization using Vim function
+inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Hotkeys
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Custom mapleader.
-let mapleader = ","
 
 " Latex compile.
 map <leader>ll :w !latexmk -silent -pdf % <enter>
