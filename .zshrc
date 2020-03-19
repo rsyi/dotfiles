@@ -117,3 +117,6 @@ alias gst="git status"
 HISTSIZE=999999999
 SAVEHIST=$HISTSIZE
 
+# FZF preview functionality.
+export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
+
