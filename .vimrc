@@ -128,7 +128,7 @@ colorscheme slate
 hi Statement ctermfg=LightCyan
 hi Comment ctermfg=darkgrey cterm=bold
 hi LineNr ctermfg=darkblue
-hi Search ctermbg=white ctermfg=black
+hi Search ctermbg=lightcyan ctermfg=black
 hi VertSplit ctermfg=black ctermbg=black
 hi EndOfBuffer ctermfg=black
 hi IncSearch ctermfg=black
