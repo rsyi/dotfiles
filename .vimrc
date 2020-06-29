@@ -60,7 +60,7 @@ Plug 'mhinz/vim-startify'
 Plug 'janko/vim-test'
 
 " vim-blame.
-Plug 'tveskag/nvim-blame-line'
+" Plug 'tveskag/nvim-blame-line'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " fuzzy finder.
@@ -139,6 +139,7 @@ hi EndOfBuffer ctermfg=black
 hi IncSearch ctermfg=black
 hi Visual ctermfg=LightYellow ctermbg=black
 hi Pmenu ctermbg=darkgray ctermfg=white
+hi PmenuSel ctermbg=53 ctermfg=white
 
 " Font.
 set guifont=DejaVu\ Sans\ Mono\ 10
@@ -162,6 +163,7 @@ autocmd FileType python setlocal tabstop=4
 au FileType html :setlocal sw=2 ts=2 sts=2
 " Hive syntax: 'hive' needs to exist in `~/.vim/syntax` for this to work (google "hive vim").
 au BufRead,BufNewFile,BufEnter *.hql,*.sql set filetype=sql ts=2 sw=2
+au BufRead,BufNewFile,BufEnter *.js,*.tsx set ts=2 sw=2
 au BufRead,BufNewFile,BufEnter *.yaml setlocal ts=2 sw=2
 
 " Word-wrapping.
@@ -291,7 +293,7 @@ autocmd BufRead,BufNewFile,BufEnter *.md,*.markdown call MathAndLiquid()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: vim-test
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <silent> t<C-n> :TestNearest<CR>
+nmap <silent> t<C-n> :TestNearest -s<CR>
 nmap <silent> t<C-f> :TestFile<CR>
 nmap <silent> t<C-s> :TestSuite<CR>
 nmap <silent> t<C-l> :TestLast<CR>
@@ -302,7 +304,7 @@ nmap <silent> t<C-g> :TestVisit<CR>
 " Plugin: nvim-blame-line
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " autocmd BufEnter * EnableBlameLine
-nmap <Leader>bx :ToggleBlameLine<CR>
+" nmap <Leader>bx :ToggleBlameLine<CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -511,3 +513,5 @@ nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+vnoremap <leader>z :w !python ~/scratch/sqlalchemy_emr_test.py
