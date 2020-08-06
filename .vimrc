@@ -164,7 +164,7 @@ au FileType html :setlocal sw=2 ts=2 sts=2
 " Hive syntax: 'hive' needs to exist in `~/.vim/syntax` for this to work (google "hive vim").
 au BufRead,BufNewFile,BufEnter *.hql,*.sql set filetype=sql ts=2 sw=2
 au BufRead,BufNewFile,BufEnter *.js,*.tsx set ts=2 sw=2
-au BufRead,BufNewFile,BufEnter *.yaml setlocal ts=2 sw=2
+au BufRead,BufNewFile,BufEnter *.yaml,*.yml setlocal ts=2 sw=2
 
 " Word-wrapping.
 " Wraps visually, without newlines.
