@@ -6,6 +6,8 @@
 # Set up vim.
 cp ~/repos/dotfiles/.vimrc ~/.vimrc
 brew install neovim
+# Add python support.
+# pip install neovim && pip3 install neovim
 mkdir -p ~/.config/nvim && cp ~/repos/dotfiles/init.vim ~/.config/nvim/init.vim
 # Set up zsh.
 brew install zsh
