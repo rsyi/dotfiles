@@ -1,0 +1,16 @@
+[Base]
+Esc:BackTick
+Caps:Esc
+
+[Macro(Dollar)]
+Press:LShift+D4
+
+[Layer1]
+J:Left
+C:Down
+V:Up
+P:Right
+Comma:LWin+Right
+N:LWin+Left
+D0:Home
+D4:End
