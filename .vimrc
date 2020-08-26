@@ -64,8 +64,8 @@ Plug 'janko/vim-test'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " fuzzy finder.
-" Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-" Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 " YouCompleteMe.
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
@@ -183,9 +183,6 @@ set autoread
 
 " Spell-check.
 au BufNewFile,BufRead *.tex set spell
-
-" Automatically set working directory to current file.
-set autochdir
 
 " Custom mapleader.
 let mapleader = ","
