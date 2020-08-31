@@ -129,5 +129,6 @@ alias glom="git pull origin master"
 alias gb="git branch" # + branch name
 alias gc="git checkout" # + branch name
 alias gcb="git checkout -b" # + branch name
+alias gcm="git checkout master"
 
 alias gst="git status"
