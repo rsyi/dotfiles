@@ -1,7 +1,8 @@
 # Prerequisites:
 # - ssh keys for github are set up and this repo is cloned into ~/repos
-# - brew is installed.
-# Once this is complete, run `. mac.sh`.
+
+# Install brew.
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
 # Set up vim.
 cp ~/repos/dotfiles/.vimrc ~/.vimrc

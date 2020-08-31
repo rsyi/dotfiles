@@ -3,7 +3,7 @@ last_mods = {}
 control_key_handler = function()
   send_escape = false
 end
-control_key_timer = hs.timer.delayed.new(0.25, control_key_handler)
+control_key_timer = hs.timer.delayed.new(0.5, control_key_handler)
 control_handler = function(evt)
   local new_mods = evt:getFlags()
   if last_mods["ctrl"] == new_mods["ctrl"] then

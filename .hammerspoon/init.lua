@@ -1,9 +1,15 @@
+-- Spectacle emulation.
+-- hs.loadSpoon("Lunette")
+-- spoon.Lunette:bindHotkeys()
+
+-- Control when held, escape when tapped.
 keyUpDown = function(modifiers, key)
   hs.eventtap.keyStroke(modifiers, key, 0)
 end
 require('control-escape')
 hs.notify.new({title='Hammerspoon', informativeText='Ready to rock 🤘'}):send()
 
+-- Custom hotkeys for commonly used apps.
 hs.hotkey.bind({"option"}, "space", function()
   local alacritty = hs.application.find('alacritty')
   if alacritty:isFrontmost() then
@@ -48,6 +54,7 @@ hs.hotkey.bind({"option"}, "f", function()
     hs.application.launchOrFocus("/Applications/Figma.app")
   end
 end)
+
 
 --------------------------------
 -- START VIM CONFIG

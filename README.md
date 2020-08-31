@@ -2,22 +2,14 @@
 These are my personal dot-files and configuration files.
 
 ## MacOS
-I'm currently using MacOS. On a fresh install,
-
 1. Clone this repo into `~/repos/dotfiles`.
-1. Install brew.
+1. Set up git. If necessary, [generate new SSH keys and add them to your github account](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
 1. Navigate to the `dotfiles` directory, and run `. mac.sh`.
+1. Run `:PlugInstall` in vim, to install all `.vimrc` plugins.
 
-### Vim
-1. Install neovim (`sudo apt install neovim`).
-2. Copy `init.vim` to `~/.config/nvim`.
-3. Install vim-plug, following git repo instructions https://github.com/junegunn/vim-plug .
-4. Rename directory `vimwiki-personal` in `.vimrc` to whatever you want it to
-   be. Optionally, add another for work.
-5. Run `pip3 install python-language-server`.
-6. Run `:PlugInstall` in vim, to install vim-lsp, vimwiki.
 
-## Fresh install on Windows (as of 2018-09-30) [deprecated]
+## Windows
+*I spend nearly 100% of my time on mac these days, so these instructions are no longer maintained.*
 
 ### WSL
 1. Install Ubuntu on Windows from the Microsoft Store.
@@ -44,5 +36,3 @@ Unfortunately, however, this doesn't work out of the box for the reasons laid ou
 
 ### Notes
 * If using WSL, don't save important non-git-associated files in `~/` -- this directory will be deleted upon uninstall of Ubuntu. Use the `/mnt/c/Users/USERNAME` directory instead.
-
-

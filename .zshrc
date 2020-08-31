@@ -110,9 +110,6 @@ alias kgss="kubectl get statefulset"
 alias kgpo="kubectl get pod"
 alias kgdep="kubectl get deploy"
 
-# Git aliases.
-alias gst="git status"
-
 # Lengthen the history - this needs to be at the bottom.
 HISTSIZE=999999999
 SAVEHIST=$HISTSIZE
@@ -120,3 +117,17 @@ SAVEHIST=$HISTSIZE
 # FZF preview functionality.
 export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
 
+# Git aliases.
+alias gp="git push" # + remote & branch names
+alias gpo="git push origin" # + branch name
+alias gpom="git push origin master"
+
+alias gl="git pull" # + remote & branch names
+alias glo="git pull origin" # + branch name
+alias glom="git pull origin master"
+
+alias gb="git branch" # + branch name
+alias gc="git checkout" # + branch name
+alias gcb="git checkout -b" # + branch name
+
+alias gst="git status"
