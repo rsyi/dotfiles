@@ -60,7 +60,10 @@ Plug 'mhinz/vim-startify'
 Plug 'janko/vim-test'
 
 " vim-blame.
-" Plug 'tveskag/nvim-blame-line'
+Plug 'APZelos/blamer.nvim'
+
+" Fugitive.
+Plug 'tpope/vim-fugitive'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " fuzzy finder.
@@ -300,8 +303,12 @@ nmap <silent> t<C-g> :TestVisit<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: nvim-blame-line
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" autocmd BufEnter * EnableBlameLine
-" nmap <Leader>bx :ToggleBlameLine<CR>
+let g:blamer_enabled = 1
+nmap <Leader>bx :ToggleBlameLine<CR>
+let g:blamer_delay = 100
+let g:blamer_show_in_visual_modes = 0
+let g:blamer_template = '<author>, <committer> • <committer-time> • <summary>'
+let g:blamer_prefix = ' '
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -320,6 +327,10 @@ imap <c-x><c-l> <plug>(fzf-complete-line)
 
 " Advanced customization using Vim function
 inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
+
+
+nnoremap <silent> <leader><space> :Files<CR>
+nnoremap <silent> <leader>bb :Buffers<CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -349,7 +360,7 @@ nmap <Leader>g :Goyo<CR>
 map <C-n> :NERDTreeToggle<CR>
 
 " Buffer management.
-nmap <Leader>bb :ls<CR>:buffer<Space>
+" nmap <Leader>bb :ls<CR>:buffer<Space>
 nmap <Leader>bp :bprev<CR>
 nmap <Leader>bn :bnext<CR>
 
