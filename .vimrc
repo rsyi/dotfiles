@@ -181,6 +181,9 @@ set nu rnu
 noremap <F3> :set nu! rnu!<CR>
 
 " Window dressing.
+" Status bar to show file name.
+set laststatus=2
+set statusline+=%F
 " If a file is changed while vim has it open, and vim doesn't have unsaved changes, automatically reload file.
 set autoread
 
