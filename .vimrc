@@ -30,12 +30,6 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 call plug#begin()
 
-" vim-lsp
-"Plug 'prabirshrestha/async.vim'
-"Plug 'prabirshrestha/vim-lsp'
-"Plug 'prabirshrestha/asyncomplete.vim'
-"Plug 'prabirshrestha/asyncomplete-lsp.vim'
-
 " Better defaults: backspace through lines, search dynamically.
 Plug 'tpope/vim-sensible'
 
@@ -73,48 +67,10 @@ Plug 'junegunn/fzf.vim'
 " YouCompleteMe.
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 
+" Editorconfig
+Plug 'editorconfig/editorconfig-vim'
+
 call plug#end()
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugin: vim-lsp
-"
-"    Putting this first, so python language server starts up quickly.
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" python registration.
-if executable('pyls')
-    " pip install python-language-server
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pyls']},
-        \ 'whitelist': ['python'],
-        \ })
-endif
-" Asyncomplete source registration.
-if executable('pyls')
-    " pip install python-language-server
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pyls']},
-        \ 'whitelist': ['python'],
-        \ })
-endif
-
-
-" typescript registration.
-if executable('typescript-language-server')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'typescript-language-server',
-        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-        \ 'whitelist': ['typescript', 'typescript.tsx'],
-        \ })
-endif
-
-let g:lsp_virtual_text_enabled = 0
-let g:lsp_diagnostics_enabled = 0
-" let g:asyncomplete_auto_popup = 0
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -193,6 +149,48 @@ au BufNewFile,BufRead *.tex set spell
 " Custom mapleader.
 let mapleader = ","
 
+noremap <C-c> "+y<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: vim-lsp
+"
+"    Putting this first, so python language server starts up quickly.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" python registration.
+if executable('pyls')
+    " pip install python-language-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
+" Asyncomplete source registration.
+if executable('pyls')
+    " pip install python-language-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
+
+
+" typescript registration.
+if executable('typescript-language-server')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'typescript-language-server',
+        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+        \ 'whitelist': ['typescript', 'typescript.tsx'],
+        \ })
+endif
+
+let g:lsp_virtual_text_enabled = 0
+let g:lsp_diagnostics_enabled = 0
+" let g:asyncomplete_auto_popup = 0
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: vimwiki
@@ -202,7 +200,6 @@ let mapleader = ","
 " For work, add `wiki_2` following the instructions here:
 " https://opensource.com/article/18/6/vimwiki-gitlab-notes
 let g:vimwiki_list = [
-    \ {'path': '~/vimwiki-dataframe', 'syntax': 'markdown', 'ext': '.md'},
     \ {'path': '~/vimwiki-personal', 'syntax': 'markdown', 'ext': '.md'}
     \ ]
 let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
@@ -232,8 +229,6 @@ endfunction
 
 " To allow for completed objects to be a diff color.
 let g:vimwiki_hl_cb_checked = 2
-
-
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -292,6 +287,33 @@ autocmd BufRead,BufNewFile,BufEnter *.md,*.markdown call MathAndLiquid()
 "" endfunction
 
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: goyo
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! s:goyo_enter()
+  let b:quitting = 0
+  let b:quitting_bang = 0
+  autocmd QuitPre <buffer> let b:quitting = 1
+  cabbrev <buffer> q! let b:quitting_bang = 1 <bar> q!
+endfunction
+
+function! s:goyo_leave()
+  " Quit Vim if this is the only remaining buffer
+  if b:quitting && len(filter(range(1, bufnr('$')), 'buflisted(v:val)')) == 1
+    if b:quitting_bang
+      qa!
+    else
+      qa
+    endif
+  endif
+endfunction
+
+autocmd! User GoyoEnter call <SID>goyo_enter()
+autocmd! User GoyoLeave call <SID>goyo_leave()
+
+autocmd BufRead,BufNewFile ~/vimwiki-personal/* Goyo 120x40
+autocmd BufRead,BufNewFile ~/vimwiki-personal/* set autochdir
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: vim-test
@@ -307,7 +329,7 @@ nmap <silent> t<C-g> :TestVisit<CR>
 " Plugin: nvim-blame-line
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:blamer_enabled = 1
-nmap <Leader>bx :ToggleBlameLine<CR>
+nmap <Leader>bx :BlamerToggle<CR>
 let g:blamer_delay = 100
 let g:blamer_show_in_visual_modes = 0
 let g:blamer_template = '<author>, <committer> • <committer-time> • <summary>'
@@ -332,7 +354,7 @@ imap <c-x><c-l> <plug>(fzf-complete-line)
 inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
 
 
-nnoremap <silent> <leader><space> :Files<CR>
+nnoremap <silent> <leader><space> :GFiles<CR>
 nnoremap <silent> <leader>bb :Buffers<CR>
 
 
@@ -384,6 +406,15 @@ autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " coc.nvim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" KITE-INCOMPATIBLE
+" " Use K to show documentation in preview window.
+" nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+" END KITE-INCOMPATIBLE
+
+" Set default python path to my default venv
+call coc#config('python', {'pythonPath': '/Users/robertyi/envs/default/bin/python3'})
 
 " TextEdit might fail if hidden is not set.
 set hidden
@@ -440,9 +471,6 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -524,5 +552,3 @@ nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
-
-vnoremap <leader>z :w !python ~/scratch/sqlalchemy_emr_test.py
