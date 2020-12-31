@@ -40,8 +40,9 @@ brew install tmux
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 cp ~/repos/dotfiles/.tmux.conf ~/.tmux.conf
 
-# Set up kubectl.
-brew install kubectl
+# Set up other CLI tools.
+brew install fzf
+brew install fx
 
 # Set up typescript-language-server.
 npm install -g typescript typescript-language-server
