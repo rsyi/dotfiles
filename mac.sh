@@ -46,3 +46,11 @@ brew install fx
 
 # Set up typescript-language-server.
 npm install -g typescript typescript-language-server
+
+# Emacs, doom emacs
+mkdir ~/.emacs.d
+git clone https://github.com/hlissner/doom-emacs ~/.emacs.d
+~/.emacs.d/bin/doom install
+brew install emacs
+brew install coreutils fd
+cp -r ~/repos/dotfiles/.doom.d ~/.doom.d
