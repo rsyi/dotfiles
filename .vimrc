@@ -28,21 +28,30 @@
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  au VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 call plug#begin()
 
+" Autocomplete (needed only for tsserver)
+Plug 'nvim-lua/completion-nvim'
+" Ultisnips (used for vim-react-snippets and vim-snippets)
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+" Frontend
+Plug 'mlaursen/vim-react-snippets'
+Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
+Plug 'maxmellon/vim-jsx-pretty'
 " Better defaults: backspace through lines, search dynamically.
 Plug 'tpope/vim-sensible'
 " Improved file tree.
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+" Colors
+Plug 'dracula/vim', { 'as': 'dracula' }
 " Wiki for vim (for note-taking).
 Plug 'vimwiki/vimwiki'
 " Dynamic hacker coding (a la jupyter).
 Plug 'metakirby5/codi.vim'
-" React js syntax highlighting.
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
 " Easier visual mode.
 Plug 'junegunn/goyo.vim'
 Plug 'mhinz/vim-startify'
@@ -55,6 +64,8 @@ Plug 'tpope/vim-fugitive'
 " fuzzy finder.
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+" vim-zettel - may have to come after vimwiki, fzf, fzf.vim
+Plug 'michal-h21/vim-zettel'
 " Editorconfig
 Plug 'editorconfig/editorconfig-vim'
 Plug 'neovim/nvim-lspconfig'
@@ -73,27 +84,19 @@ set noswapfile  " Disable swap files.
 
 " Allow for scrolling.
 set mouse=a
-map <ScrollWheelUp> <C-Y>
-map <ScrollWheelDown> <C-E>
 
 " Colors.
-set background=dark
-colorscheme slate
-hi Comment ctermfg=darkgrey cterm=bold
-hi LineNr ctermfg=darkblue
-" hi Statement ctermfg=LightCyan
-hi Search ctermbg=lightcyan ctermfg=black
+" set background=dark
+" colorscheme slate
+hi MatchParen cterm=bold ctermbg=darkgray
+hi LineNr ctermfg=darkgrey
 hi VertSplit ctermfg=black ctermbg=black
-" hi EndOfBuffer ctermfg=black
-hi IncSearch ctermfg=black
-hi Visual ctermfg=LightYellow ctermbg=black
-hi Pmenu ctermbg=darkgray ctermfg=white
-hi PmenuSel ctermbg=53 ctermfg=white
+hi Pmenu ctermbg=black guibg=black ctermfg=gray
+hi PmenuSel ctermfg=white
 
 " Font.
-set guifont=DejaVu\ Sans\ Mono\ 10
 " Show trailing whitespace.
-highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+highlight ExtraWhitespace ctermbg=darkgray guibg=darkgray
 match ExtraWhitespace /\s\+$/
 
 " Tab hehavior.
@@ -107,13 +110,10 @@ set tabstop=4
 set shiftwidth=4
 set autoindent
 " Prevent weird 8 space tabs in python files.
-autocmd FileType python setlocal tabstop=4
-" Two spaces for HTML files.
-au FileType html :setlocal sw=2 ts=2 sts=2
-" Hive syntax: 'hive' needs to exist in `~/.vim/syntax` for this to work (google "hive vim").
-au BufRead,BufNewFile,BufEnter *.hql,*.sql set filetype=sql ts=2 sw=2
-au BufRead,BufNewFile,BufEnter *.js,*.tsx set ts=2 sw=2
-au BufRead,BufNewFile,BufEnter *.yaml,*.yml setlocal ts=2 sw=2
+au FileType python setlocal tabstop=4
+au BufRead,BufNewFile,BufEnter *.hql,*.sql set filetype=sql
+au FileType html,markdown :setlocal sw=2 ts=2 sts=2
+au BufRead,BufNewFile,BufEnter *.js,*.tsx,*.yaml,*.yml,*.hql,*.sql,.vimrc setlocal ts=2 sw=2
 
 " Word-wrapping.
 " Wraps visually, without newlines.
@@ -133,14 +133,26 @@ set statusline+=%F
 " If a file is changed while vim has it open, and vim doesn't have unsaved changes, automatically reload file.
 set autoread
 
-" Spell-check.
-au BufNewFile,BufRead *.tex set spell
-
 " Custom mapleader.
 let mapleader = " "
 
 noremap <C-c> "+y<CR>
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: completion-nvim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+autocmd BufEnter * lua require'completion'.on_attach()
+
+" Set completeopt to have a better completion experience
+set completeopt=menuone,noinsert,noselect
+
+" Avoid showing message extra message when using completion
+set shortmess+=c
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: Ultisnips
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:UltiSnipsExpandTrigger="<tab>"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: vimwiki
@@ -180,6 +192,13 @@ endfunction
 " To allow for completed objects to be a diff color.
 let g:vimwiki_hl_cb_checked = 2
 
+" vim-zettel
+let g:zettel_fzf_command = "rg --column --line-number --ignore-case --no-heading --color=always --sortr=modified"
+let g:zettel_format = "%y%m%d-%H%M-%title"
+let g:nv_search_paths = ["~/vimwiki/", "~/vimwiki/diary"]
+nnoremap <leader>gt :VimwikiRebuildTags!<cr>:VimwikiGenerateTagLinks<cr><c-l>
+nnoremap <leader>bl :ZettelBackLinks<cr>
+nnoremap <leader>zn :ZettelNew<space>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Custom: latex math syntax highlighting
@@ -213,7 +232,10 @@ function! MathAndLiquid()
 endfunction
 
 " Call everytime we open a Markdown file.
-autocmd BufRead,BufNewFile,BufEnter *.md,*.markdown call MathAndLiquid()
+
+" Spell-check.
+au BufNewFile,BufRead *.tex set spell
+au BufRead,BufNewFile,BufEnter *.md,*.markdown call MathAndLiquid()
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -222,7 +244,7 @@ autocmd BufRead,BufNewFile,BufEnter *.md,*.markdown call MathAndLiquid()
 function! s:goyo_enter()
   let b:quitting = 0
   let b:quitting_bang = 0
-  autocmd QuitPre <buffer> let b:quitting = 1
+  au QuitPre <buffer> let b:quitting = 1
   cabbrev <buffer> q! let b:quitting_bang = 1 <bar> q!
 endfunction
 
@@ -237,11 +259,20 @@ function! s:goyo_leave()
   endif
 endfunction
 
-autocmd! User GoyoEnter call <SID>goyo_enter()
-autocmd! User GoyoLeave call <SID>goyo_leave()
+" au! User GoyoEnter call <SID>goyo_enter()
+" au! User GoyoLeave call <SID>goyo_leave()
+" 
+au BufRead,BufNewFile ~/vimwiki/* Goyo 120x40
+au BufRead,BufNewFile ~/vimwiki/* cd ~/vimwiki
+au BufRead,BufNewFile ~/vimwiki/* hi Comment ctermfg=darkgrey cterm=bold
 
-autocmd BufRead,BufNewFile ~/vimwiki/* Goyo 120x40
-autocmd BufRead,BufNewFile ~/vimwiki/* set autochdir
+" For markdown auto-formatting
+function MarkdownFormat()
+  setlocal formatoptions=tacqw
+  setlocal wrapmargin=0
+  setlocal autoindent
+endfunction
+au BufRead,BufNewFile,BufEnter *.md,*.markdown call MarkdownFormat()
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -281,9 +312,11 @@ imap <c-x><c-l> <plug>(fzf-complete-line)
 
 " Advanced customization using Vim function
 inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
-
-nnoremap <silent> <leader><space> :GFiles<CR>
+nnoremap <silent> <leader><space> :Files<CR>
 noremap <silent> <leader>bb :Buffers<CR>
+
+" Ripgrep
+nnoremap <leader>sd :Rg<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Hotkeys
@@ -293,7 +326,7 @@ noremap <silent> <leader>bb :Buffers<CR>
 map <leader>ll :w !latexmk -silent -pdf % <enter>
 
 " Python.
-autocmd FileType python nnoremap <buffer> <leader>z :exec '!python' shellescape(@%, 1)<cr>
+au FileType python nnoremap <buffer> <leader>z :exec '!python' shellescape(@%, 1)<cr>
 
 " Allows `//` to visually search for selected text.
 vnoremap // y/<C-R>"<CR>
@@ -301,6 +334,9 @@ vnoremap // y/<C-R>"<CR>
 " Vimwiki diary navigation.
 nnoremap <C-j> :VimwikiDiaryNextDay<CR>
 nnoremap <C-k> :VimwikiDiaryPrevDay<CR>
+
+" Vimwiki folding
+let g:vimwiki_folding='expr'
 
 " Goyo toggle.
 nmap <Leader>g :Goyo<CR>
@@ -318,4 +354,7 @@ nnoremap <F5> "=strftime("%b %d, %Y")<CR>P
 inoremap <F5> <C-R>=strftime("%b %d, %Y")<CR>
 
 " For whale
-nmap <Leader>wh :w<CR>:exec '!~/.whale/bin/whale run %'<CR>:e<CR>
+nmap <Leader>h :w<CR>:exec '!~/.whale/bin/whale run %'<CR>:e<CR>
+
+" For dbt
+nmap <Leader>d :w<CR>:exec '!dbt run'<CR>:e<CR>
