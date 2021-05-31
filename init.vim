@@ -75,6 +75,14 @@ Plug 'michal-h21/vim-zettel'
 " Editorconfig
 Plug 'editorconfig/editorconfig-vim'
 Plug 'neovim/nvim-lspconfig'
+" Quick scope
+Plug 'unblevable/quick-scope'
+" Pear tree (pair completion)
+Plug 'tmsvg/pear-tree'
+" vim-surround
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+
 
 call plug#end()
 
@@ -144,6 +152,9 @@ let mapleader = " "
 
 noremap <C-c> "+y<CR>
 
+" Markdown indent use visual indent on line wrap
+set breakindent
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: completion-nvim
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -155,10 +166,47 @@ set completeopt=menuone,noinsert,noselect
 " Avoid showing message extra message when using completion
 set shortmess+=c
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: Ultisnips
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:UltiSnipsExpandTrigger="<tab>"
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: pear tree
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Default rules for matching:
+let g:pear_tree_pairs = {
+            \ '(': {'closer': ')'},
+            \ '[': {'closer': ']'},
+            \ '{': {'closer': '}'},
+            \ "'": {'closer': "'"},
+            \ '"': {'closer': '"'}
+            \ }
+" See pear-tree/after/ftplugin/ for filetype-specific matching rules
+
+" Pear Tree is enabled for all filetypes by default:
+let g:pear_tree_ft_disabled = []
+
+" Pair expansion is dot-repeatable by default:
+let g:pear_tree_repeatable_expand = 1
+
+" Smart pairs are disabled by default:
+let g:pear_tree_smart_openers = 0
+let g:pear_tree_smart_closers = 0
+let g:pear_tree_smart_backspace = 0
+
+" If enabled, smart pair functions timeout after 60ms:
+let g:pear_tree_timeout = 60
+
+" Automatically map <BS>, <CR>, and <Esc>
+let g:pear_tree_map_special_keys = 1
+
+" Default mappings:
+imap <BS> <Plug>(PearTreeBackspace)
+imap <CR> <Plug>(PearTreeExpand)
+imap <Esc> <Plug>(PearTreeFinishExpansion)
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: vimwiki
@@ -273,12 +321,12 @@ au BufRead,BufNewFile ~/vimwiki/* cd ~/vimwiki
 au BufRead,BufNewFile ~/vimwiki/* hi Comment ctermfg=darkgrey cterm=bold
 
 " For markdown auto-formatting
-function MarkdownFormat()
-  setlocal formatoptions=tacqw
-  setlocal wrapmargin=0
-  setlocal autoindent
-endfunction
-au BufRead,BufNewFile,BufEnter *.md,*.markdown call MarkdownFormat()
+" function MarkdownFormat()
+"   setlocal formatoptions=tacqw
+"   setlocal wrapmargin=0
+"   setlocal autoindent
+" endfunction
+" au BufRead,BufNewFile,BufEnter *.md,*.markdown call MarkdownFormat()
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -300,7 +348,7 @@ let g:blamer_delay = 100
 let g:blamer_show_in_visual_modes = 0
 let g:blamer_template = '<author>, <committer> • <committer-time> • <summary>'
 let g:blamer_prefix = ' '
-
+highlight Blamer ctermfg=darkgrey
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: fzf
