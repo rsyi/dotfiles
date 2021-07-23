@@ -1,4 +1,4 @@
-# Prerequisites:
+g Prerequisites:
 # - ssh keys for github are set up and this repo is cloned into ~/repos
 
 # Install brew.
@@ -54,3 +54,16 @@ git clone https://github.com/hlissner/doom-emacs ~/.emacs.d
 brew install emacs
 brew install coreutils fd
 cp -r ~/repos/dotfiles/.doom.d ~/.doom.d
+
+# Custom emacs functionality
+# brew install pngpaste
+# For this: https://zzamboni.org/post/my-doom-emacs-configuration-with-commentary/
+
+# Custom functionality
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+# Alacritty
+mkdir -p ~/.config/alacritty/
+cd ~/repos/dotfiles
+cp dracula.yml ~/.config/alacritty/
+cp ./.alacritty.yml ~/

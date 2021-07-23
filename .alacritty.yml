@@ -1,0 +1,30 @@
+# See https://github.com/tmcdonell/config-alacritty/blob/master/alacritty.yml
+window:
+  decorations: none
+  startup_mode: Windowed
+  padding:
+    x: 20 # 5
+    y: 20 # 5
+font:
+  #   normal:
+  #     family: "mononoki Nerd Font Mono"
+  #   bold:
+  #     family: "mononoki Nerd Font Mono"
+  #   italic:
+  #     family: "mononoki Nerd Font Mono"
+  normal:
+    family: "SF Mono"
+  bold:
+    family: "SF Mono"
+    style: Semibold
+  italic:
+    family: "SF Mono"
+  size: 15
+  offset:
+    x: 0
+    y: 20
+key_bindings:
+  - { key: Return, mods: Command, action: ToggleSimpleFullscreen }
+background_opacity: 0.98
+import:
+  - /Users/robertyi/.config/alacritty/dracula.yml
