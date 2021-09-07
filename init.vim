@@ -9,14 +9,15 @@ let &packpath = &runtimepath
 " Index:
 "   - Install plugins
 "   - General
-"   - Plugin: completion-nvim
+"   - Plugin: NERDTree
 "   - Plugin: Ultisnips
 "   - Plugin: vimwiki
 "   - Custom: latex math syntax highlighting
 "   - Plugin: Goyo
+"   - Plugin: completion-nvim
 "   - Plugin: vim-test
 "   - Plugin: nvim-blame
-"   - Plugin: fzf
+"   - Plugin: telescope
 "   - Hotkeys
 "   - Nvim language server config
 "
@@ -38,8 +39,6 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 call plug#begin()
 
-" Autocomplete (needed only for tsserver)
-Plug 'nvim-lua/completion-nvim'
 " Ultisnips (used for vim-react-snippets and vim-snippets)
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -51,7 +50,8 @@ Plug 'maxmellon/vim-jsx-pretty'
 " Better defaults: backspace through lines, search dynamically.
 Plug 'tpope/vim-sensible'
 " Improved file tree.
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'preservim/nerdtree' |
+            \ Plug 'Xuyuanp/nerdtree-git-plugin'
 " Colors
 Plug 'dracula/vim', { 'as': 'dracula' }
 " Wiki for vim (for note-taking).
@@ -67,22 +67,22 @@ Plug 'janko/vim-test'
 Plug 'APZelos/blamer.nvim'
 " Fugitive.
 Plug 'tpope/vim-fugitive'
-" fuzzy finder.
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-" vim-zettel - may have to come after vimwiki, fzf, fzf.vim
-Plug 'michal-h21/vim-zettel'
 " Editorconfig
 Plug 'editorconfig/editorconfig-vim'
+" Lsp
 Plug 'neovim/nvim-lspconfig'
+" Autocomplete
+Plug 'nvim-lua/completion-nvim'
 " Quick scope
 Plug 'unblevable/quick-scope'
-" Pear tree (pair completion)
-Plug 'tmsvg/pear-tree'
 " vim-surround
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-
+" Debugging
+Plug 'puremourning/vimspector'
+" Telescope
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 call plug#end()
 
@@ -90,6 +90,7 @@ call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+colorscheme ron
 set nocompatible
 filetype plugin on  " Necessary for auto file detection.
 set omnifunc=syntaxcomplete#Complete
@@ -100,8 +101,6 @@ set noswapfile  " Disable swap files.
 set mouse=a
 
 " Colors.
-" set background=dark
-" colorscheme slate
 hi MatchParen cterm=bold ctermbg=darkgray
 hi LineNr ctermfg=darkgrey
 hi VertSplit ctermfg=black ctermbg=black
@@ -155,16 +154,23 @@ noremap <C-c> "+y<CR>
 " Markdown indent use visual indent on line wrap
 set breakindent
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugin: completion-nvim
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd BufEnter * lua require'completion'.on_attach()
 
-" Set completeopt to have a better completion experience
-set completeopt=menuone,noinsert,noselect
-
-" Avoid showing message extra message when using completion
-set shortmess+=c
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: NERDTree
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" NERDTree hotkeys
+nnoremap <leader>n :NERDTreeFind<CR>
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeFocus<CR>
+" Auto-close tab if last file is nerdtree
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+    \ quit | endif
+" UI
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+" Delete NERDTree buffer
+let NERDTreeAutoDeleteBuffer = 1
+" Check if NERDTree is open or active
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -172,41 +178,6 @@ set shortmess+=c
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:UltiSnipsExpandTrigger="<tab>"
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugin: pear tree
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Default rules for matching:
-let g:pear_tree_pairs = {
-            \ '(': {'closer': ')'},
-            \ '[': {'closer': ']'},
-            \ '{': {'closer': '}'},
-            \ "'": {'closer': "'"},
-            \ '"': {'closer': '"'}
-            \ }
-" See pear-tree/after/ftplugin/ for filetype-specific matching rules
-
-" Pear Tree is enabled for all filetypes by default:
-let g:pear_tree_ft_disabled = []
-
-" Pair expansion is dot-repeatable by default:
-let g:pear_tree_repeatable_expand = 1
-
-" Smart pairs are disabled by default:
-let g:pear_tree_smart_openers = 0
-let g:pear_tree_smart_closers = 0
-let g:pear_tree_smart_backspace = 0
-
-" If enabled, smart pair functions timeout after 60ms:
-let g:pear_tree_timeout = 60
-
-" Automatically map <BS>, <CR>, and <Esc>
-let g:pear_tree_map_special_keys = 1
-
-" Default mappings:
-imap <BS> <Plug>(PearTreeBackspace)
-imap <CR> <Plug>(PearTreeExpand)
-imap <Esc> <Plug>(PearTreeFinishExpansion)
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: vimwiki
@@ -246,13 +217,6 @@ endfunction
 " To allow for completed objects to be a diff color.
 let g:vimwiki_hl_cb_checked = 2
 
-" vim-zettel
-let g:zettel_fzf_command = "rg --column --line-number --ignore-case --no-heading --color=always --sortr=modified"
-let g:zettel_format = "%y%m%d-%H%M-%title"
-let g:nv_search_paths = ["~/vimwiki/", "~/vimwiki/diary"]
-nnoremap <leader>gt :VimwikiRebuildTags!<cr>:VimwikiGenerateTagLinks<cr><c-l>
-nnoremap <leader>bl :ZettelBackLinks<cr>
-nnoremap <leader>zn :ZettelNew<space>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Custom: latex math syntax highlighting
@@ -315,10 +279,11 @@ endfunction
 
 " au! User GoyoEnter call <SID>goyo_enter()
 " au! User GoyoLeave call <SID>goyo_leave()
-" 
-au BufRead,BufNewFile ~/vimwiki/* Goyo 120x40
-au BufRead,BufNewFile ~/vimwiki/* cd ~/vimwiki
-au BufRead,BufNewFile ~/vimwiki/* hi Comment ctermfg=darkgrey cterm=bold
+
+" COMMENT THE NEXT THREE IF YOU WANT TO AUTO-LOAD IN VIMWIKI
+" au BufRead,BufNewFile ~/vimwiki/* Goyo 120x40
+" au BufRead,BufNewFile ~/vimwiki/* cd ~/vimwiki
+" au BufRead,BufNewFile ~/vimwiki/* hi Comment ctermfg=darkgrey cterm=bold
 
 " For markdown auto-formatting
 " function MarkdownFormat()
@@ -327,6 +292,25 @@ au BufRead,BufNewFile ~/vimwiki/* hi Comment ctermfg=darkgrey cterm=bold
 "   setlocal autoindent
 " endfunction
 " au BufRead,BufNewFile,BufEnter *.md,*.markdown call MarkdownFormat()
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin: completion-nvim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:completion_enable_snippet = 'UltiSnips'
+" Autocomplete on every buffer
+autocmd BufEnter * lua require'completion'.on_attach()
+
+" Use <Tab> and <S-Tab> to navigate through popup menu
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Set completeopt to have a better completion experience
+set completeopt=menuone,noinsert,noselect
+
+" Avoid showing message extra message when using completion
+set shortmess+=c
+
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -350,27 +334,15 @@ let g:blamer_template = '<author>, <committer> • <committer-time> • <summary
 let g:blamer_prefix = ' '
 highlight Blamer ctermfg=darkgrey
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugin: fzf
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Mapping selecting mappings
-nmap <leader><tab> <plug>(fzf-maps-n)
-xmap <leader><tab> <plug>(fzf-maps-x)
-omap <leader><tab> <plug>(fzf-maps-o)
+" Plugin: telescope
 
-" Insert mode completion
-imap <c-x><c-k> <plug>(fzf-complete-word)
-imap <c-x><c-f> <plug>(fzf-complete-path)
-imap <c-x><c-j> <plug>(fzf-complete-file-ag)
-imap <c-x><c-l> <plug>(fzf-complete-line)
+nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 
-" Advanced customization using Vim function
-inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'left': '15%'})
-nnoremap <silent> <leader><space> :Files<CR>
-noremap <silent> <leader>bb :Buffers<CR>
-
-" Ripgrep
-nnoremap <leader>sd :Rg<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Hotkeys
@@ -417,15 +389,27 @@ nmap <Leader>d :w<CR>:exec '!dbt run'<CR>:e<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Language server
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Errors in Red
+hi LspDiagnosticsVirtualTextError guifg=Red ctermfg=Red
+" Warnings in Yellow
+hi LspDiagnosticsVirtualTextWarning guifg=Yellow ctermfg=Yellow
+" Info and Hints in White
+hi LspDiagnosticsVirtualTextInformation guifg=Darkgrey ctermfg=darkgrey
+hi LspDiagnosticsVirtualTextHint guifg=darkgrey ctermfg=darkgrey
+
+" Underline the offending code
+hi LspDiagnosticsUnderlineError guifg=NONE ctermfg=NONE cterm=underline gui=underline
+hi LspDiagnosticsUnderlineWarning guifg=NONE ctermfg=NONE cterm=underline gui=underline
+hi LspDiagnosticsUnderlineInformation guifg=NONE ctermfg=NONE cterm=underline gui=underline
+hi LspDiagnosticsUnderlineHint guifg=NONE ctermfg=NONE cterm=underline gui=underline
+
 
 lua << EOF
-require'lspconfig'.pyls.setup{}
-require'lspconfig'.rust_analyzer.setup{}
-require'lspconfig'.tsserver.setup{}
 
 -- https://github.com/neovim/nvim-lspconfig#Keybindings-and-completion
-local nvim_lsp = require('lspconfig')
 local on_attach = function(client, bufnr)
+  require'completion'.on_attach(client, bufnr)
+
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
@@ -471,10 +455,15 @@ local on_attach = function(client, bufnr)
   end
 end
 
--- Use a loop to conveniently both setup defined servers 
--- and map buffer local keybindings when the language server attaches
-local servers = { "pyls", "rust_analyzer", "tsserver" }
+local nvim_lsp = require('lspconfig')
+local servers = { 'pyright', 'rust_analyzer', 'tsserver' }
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup { on_attach = on_attach }
+  nvim_lsp[lsp].setup {
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes = 150,
+    }
+  }
 end
+
 EOF
