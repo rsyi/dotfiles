@@ -10,11 +10,8 @@ let &packpath = &runtimepath
 "   - Install plugins
 "   - General
 "   - Plugin: NERDTree
-"   - Plugin: Ultisnips
 "   - Plugin: vimwiki
 "   - Custom: latex math syntax highlighting
-"   - Plugin: Goyo
-"   - Plugin: completion-nvim
 "   - Plugin: vim-test
 "   - Plugin: nvim-blame
 "   - Plugin: telescope
@@ -39,9 +36,6 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 call plug#begin()
 
-" Ultisnips (used for vim-react-snippets and vim-snippets)
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
 " Frontend
 Plug 'mlaursen/vim-react-snippets'
 Plug 'pangloss/vim-javascript'
@@ -56,33 +50,31 @@ Plug 'preservim/nerdtree' |
 Plug 'dracula/vim', { 'as': 'dracula' }
 " Wiki for vim (for note-taking).
 Plug 'vimwiki/vimwiki'
-" Dynamic hacker coding (a la jupyter).
-Plug 'metakirby5/codi.vim'
 " Easier visual mode.
-Plug 'junegunn/goyo.vim'
 Plug 'mhinz/vim-startify'
 " vim-test.
 Plug 'janko/vim-test'
 " vim-blame.
 Plug 'APZelos/blamer.nvim'
-" Fugitive.
+" Fugitive: git integration (:Git)
 Plug 'tpope/vim-fugitive'
 " Editorconfig
 Plug 'editorconfig/editorconfig-vim'
 " Lsp
 Plug 'neovim/nvim-lspconfig'
-" Autocomplete
-Plug 'nvim-lua/completion-nvim'
 " Quick scope
 Plug 'unblevable/quick-scope'
 " vim-surround
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-" Debugging
-Plug 'puremourning/vimspector'
 " Telescope
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+" Vimspector (debugger)
+Plug 'puremourning/vimspector'
+let g:vimspector_enable_mappings='HUMAN'
+" Github Copilot
+Plug 'github/copilot.vim'
 
 call plug#end()
 
@@ -90,7 +82,7 @@ call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-colorscheme ron
+colorscheme default
 set nocompatible
 filetype plugin on  " Necessary for auto file detection.
 set omnifunc=syntaxcomplete#Complete
@@ -174,12 +166,6 @@ let NERDTreeAutoDeleteBuffer = 1
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugin: Ultisnips
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:UltiSnipsExpandTrigger="<tab>"
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin: vimwiki
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -257,50 +243,8 @@ au BufRead,BufNewFile,BufEnter *.md,*.markdown call MathAndLiquid()
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugin: goyo
+" Autocomplete settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-function! s:goyo_enter()
-  let b:quitting = 0
-  let b:quitting_bang = 0
-  au QuitPre <buffer> let b:quitting = 1
-  cabbrev <buffer> q! let b:quitting_bang = 1 <bar> q!
-endfunction
-
-function! s:goyo_leave()
-  " Quit Vim if this is the only remaining buffer
-  if b:quitting && len(filter(range(1, bufnr('$')), 'buflisted(v:val)')) == 1
-    if b:quitting_bang
-      qa!
-    else
-      qa
-    endif
-  endif
-endfunction
-
-" au! User GoyoEnter call <SID>goyo_enter()
-" au! User GoyoLeave call <SID>goyo_leave()
-
-" COMMENT THE NEXT THREE IF YOU WANT TO AUTO-LOAD IN VIMWIKI
-" au BufRead,BufNewFile ~/vimwiki/* Goyo 120x40
-" au BufRead,BufNewFile ~/vimwiki/* cd ~/vimwiki
-" au BufRead,BufNewFile ~/vimwiki/* hi Comment ctermfg=darkgrey cterm=bold
-
-" For markdown auto-formatting
-" function MarkdownFormat()
-"   setlocal formatoptions=tacqw
-"   setlocal wrapmargin=0
-"   setlocal autoindent
-" endfunction
-" au BufRead,BufNewFile,BufEnter *.md,*.markdown call MarkdownFormat()
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugin: completion-nvim
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:completion_enable_snippet = 'UltiSnips'
-" Autocomplete on every buffer
-autocmd BufEnter * lua require'completion'.on_attach()
-
 " Use <Tab> and <S-Tab> to navigate through popup menu
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
@@ -364,9 +308,6 @@ nnoremap <C-k> :VimwikiDiaryPrevDay<CR>
 " Vimwiki folding
 let g:vimwiki_folding='expr'
 
-" Goyo toggle.
-nmap <Leader>g :Goyo<CR>
-
 " NERDTree toggle.
 map <C-n> :NERDTreeToggle<CR>
 
@@ -378,9 +319,6 @@ nmap <Leader>bn :bnext<CR>
 " Print datetime.
 nnoremap <F5> "=strftime("%b %d, %Y")<CR>P
 inoremap <F5> <C-R>=strftime("%b %d, %Y")<CR>
-
-" For whale
-nmap <Leader>h :w<CR>:exec '!~/.whale/bin/whale run %'<CR>:e<CR>
 
 " For dbt
 nmap <Leader>d :w<CR>:exec '!dbt run'<CR>:e<CR>
@@ -434,25 +372,25 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 
   -- Set some keybinds conditional on server capabilities
-  if client.resolved_capabilities.document_formatting then
-    buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-  elseif client.resolved_capabilities.document_range_formatting then
-    buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
-  end
+--   if client.resolved_capabilities.document_formatting then
+--     buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+--   elseif client.resolved_capabilities.document_range_formatting then
+--     buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+--   end
 
   -- Set autocommands conditional on server_capabilities
-  if client.resolved_capabilities.document_highlight then
-    vim.api.nvim_exec([[
-      hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
-      hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
-      hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
-      augroup lsp_document_highlight
-        autocmd! * <buffer>
-        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-      augroup END
-    ]], false)
-  end
+--  if client.resolved_capabilities.document_highlight then
+--    vim.api.nvim_exec([[
+--      hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
+--      hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
+--      hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
+--      augroup lsp_document_highlight
+--        autocmd! * <buffer>
+--        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+--        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+--      augroup END
+--    ]], false)
+--  end
 end
 
 local nvim_lsp = require('lspconfig')
