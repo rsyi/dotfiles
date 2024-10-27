@@ -1,38 +1,57 @@
 # dotfiles
-These are my personal dot-files and configuration files.
+
+These are my personal dot-files and configuration files. In general, I've come
+to rely a lot less on a bash script for fresh installs as I used to for a
+couple of reasons:
+
+1. **Bloat:** I found that I was copying over a lot of files that I didn't
+   need. By the time I do some sort of system reset, the file that I set up
+years ago is usually full of cruft that I've since deprecated, and so to run it
+with confidence requires re-writing it anyway.
+2. **Outdated:** The preferred installation mechanisms for things changes --
+   e.g. for a long time installing Python binaries directly was the preferred
+method of setting up Python, but homebrew has, over the years, become much more
+reliable.
+
+So I now follow a much simpler philosophy:
+
+- Copy over dotfiles, keys, and config files so my configurations are ported over.
+- Write down some instructions for setting up the manual things that I know I'll need.
+
+In all, the whole process takes only ~15 minutes, which is generally less than
+the amount of time it takes to maintain a dedicated shell script.
+
+So where this directory once was fully of shell scripts and a more automated
+deployment system, it's now just a collection of configuration files and this
+README, compiling the instructions and sharing my philosophy.
 
 ## MacOS
-1. Clone this repo into `~/repos/dotfiles`.
-1. Set up git. If necessary, [generate new SSH keys and add them to your github account](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
-1. Navigate to the `dotfiles` directory, and run `. mac.sh`.
-1. Run `:PlugInstall` in vim, to install all `.vimrc` plugins.
 
+Rather than using a shell script and copying over files from this repository,
+I've found lately that the fastest way to get started with a new machine for
+mac is to copy over the following directories and files manually:
 
-## Windows
-*I spend nearly 100% of my time on mac these days, so these instructions are no longer maintained.*
+- `~/.config/`
+- `~/.hammerspoon/`
+- `~/.ssh/`
+- `~/.zshrc/`
+- `~/.oh-my-zsh/` (optional)
+- `~/.tmux.conf`
+- `~/path/to/misc/keys/`
 
-### WSL
-1. Install Ubuntu on Windows from the Microsoft Store.
-2. Clones this repo, move `.vimrc` and `.tmux.conf` into `~/`. If you want to
-   use oh-my-zsh, also move `ryi.zsh-theme` into the appropriate themes folder
-   `~/.oh-my-zsh/...` and copy the `.zshrc` file over as well.
-3. Add the contents of `.bashrc_partial` to `.bashrc`, or whatever shell config
-   file you're using.
-4. Run a `sudo apt-get update`.
-5. Install pip and pip3 with `sudo apt-get install python3-pip` and `sudo
-   apt-get install python-pip` (optional).
-6. `sudo pip3 install virtualenv`.
-7. Create a `./venvs` folder.
-8. Run `virtualenv -p python3 default` within this folder.
-9. Install jupyter-nb-extensions.
-10. Install jupyter-vim-binding.
+Then install software as needed. In particular, set up:
 
-### Vimwiki Links in Browser
-Add the line:
-`export BROWSER='/mnt/c/Program Files (x86)/Google/Chrome/Application/chrome.exe'`
-to your `.zshrc` file in order to open links in chrome (or whatever browser you want to use). By default, I've already added it to my `.zshrc` file within this repo, but you might want to change the path according to your default browser.
+- [Homebrew](https://docs.brew.sh/Installation)
+- [Alacritty](https://github.com/alacritty/alacritty)
+  - By default, my alacritty toml file uses [VictorMono Nerd Font
+  Mono](https://www.nerdfonts.com/font-downloads#:~:text=Download-,VictorMono,-%E2%80%A2%20Version%3A%201.5.6),
+  which needs to be downloaded for the system not to fall back to Menlo. For
+  lazy.nvim, you need some sort of nerd font at minimum.
+- `brew install python3` (note, this comes with `pip3`, but you'll need to
+alias `pip3` as `pip`)
+- `rust`
+- `rust-analyzer` and `rust-src` (or just `brew install rust-analyzer` so
+lazy.nvim can detect it)
 
-Unfortunately, however, this doesn't work out of the box for the reasons laid out here: https://github.com/Microsoft/WSL/issues/1766 (at least as of 2019-03-27). Basically, `xdg-open`, which is used by `vimwiki` by default, hates spaces. To fix this, you can go directly into the executable file for `xdg-open` in `/usr/bin/xdg-open` and quote instances of `$browser$`, replacing them with `"$browser"` (around line 840).
-
-### Notes
-* If using WSL, don't save important non-git-associated files in `~/` -- this directory will be deleted upon uninstall of Ubuntu. Use the `/mnt/c/Users/USERNAME` directory instead.
+I otherwise don't keep any static files on disk. I do have an Obsidian vault
+which I back up to git, so I pull this, then manually connect it to Obsidian.
