@@ -60,7 +60,7 @@ ZSH_THEME="ryi"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  vi-mode ssh-agent fzf
+  vi-mode ssh-agent fzf asdf
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -132,3 +132,6 @@ alias gcb="git checkout -b" # + branch name
 alias gcm="git checkout master"
 
 alias gst="git status"
+
+# Rust aliases
+alias cb="cargo build"
