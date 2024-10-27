@@ -1,0 +1,17 @@
+[window]
+
+opacity = 0.98
+
+padding.x = 10
+padding.y = 10
+
+decorations = "None"
+
+[font]
+
+normal.family = "VictorMono Nerd Font Mono"
+bold.family = "VictorMono Nerd Font Mono"
+italic.family = "VictorMono Nerd Font Mono"
+bold_italic.family = "VictorMono Nerd Font Mono"
+
+size = 15.0
